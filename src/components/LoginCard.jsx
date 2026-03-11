@@ -33,12 +33,22 @@ const LoginCard = ({ title }) => {
       setSuccess(result.data.message);
 
       const token = result.data.accessToken;
+      const role = result.data.role;
+
+      localStorage.setItem("role", role);
+
+      if (role === "student") {
+        navigate("/student/profile");
+      } else if (role === "admin") {
+        navigate("/admin/dashboard");
+      } else if (role === "faculty") {
+        navigate("/faculty/dashboard");
+      }
 
       if (token) {
         localStorage.setItem("accessToken", token);
       }
 
-      navigate("/student/profile")
 
     } catch (e) {
       setError(

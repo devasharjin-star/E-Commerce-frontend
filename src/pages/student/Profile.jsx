@@ -5,17 +5,14 @@ import StatCard from "../../components/dashboard/StatCard";
 import { GraduationCap, BookOpen, Calendar } from "lucide-react";
 
 const Profile = () => {
-  useEffect(() => {
+ useEffect(() => {
+
     const fetchProfile = async () => {
-      try {
-        const res = await api.get("/auth/add");
-        console.log(res.data);
-      } catch (err) {
-        console.log(err);
-      }
+      const res = await api.get("/auth/add");
     };
 
     fetchProfile();
+
   }, []);
 
   return (

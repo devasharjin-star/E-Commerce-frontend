@@ -2,14 +2,13 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: "http://localhost:3000/api",
-  withCredentials: true,
+  withCredentials: true
 });
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("accessToken");
 
   if (token) {
-    config.headers = config.headers || {};
     config.headers.Authorization = `Bearer ${token}`;
   }
 
@@ -18,35 +17,34 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
   (response) => response,
-
   async (error) => {
     const originalRequest = error.config;
 
     if (error.response?.status === 401 && !originalRequest._retry) {
+
       originalRequest._retry = true;
 
       try {
+
         const res = await axios.get(
           "http://localhost:3000/api/auth/refresh",
           { withCredentials: true }
         );
 
-        const newAccessToken = res.data.accessToken;
+        const newToken = res.data.accessToken;
 
-        localStorage.setItem("accessToken", newAccessToken);
+        localStorage.setItem("accessToken", newToken);
 
-        originalRequest.headers = originalRequest.headers || {};
-        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        originalRequest.headers.Authorization = `Bearer ${newToken}`;
 
         return api(originalRequest);
+
       } catch (err) {
-        console.log(err);
-        localStorage.removeItem("accessToken");
         window.location.href = "/";
       }
     }
 
-    return Promise.reject(error);
+    return Promise.resolve(error.response);
   }
 );
 

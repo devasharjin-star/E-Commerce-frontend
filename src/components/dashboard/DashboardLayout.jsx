@@ -17,7 +17,7 @@ const DashboardLayout = () => {
     >
       <Sidebar />
 
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col md:ml-64">
         <Topbar />
 
         <main className="p-6">
