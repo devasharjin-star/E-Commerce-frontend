@@ -1,5 +1,5 @@
-import AuthLayout from "../layout/AuthLayout";
-import LoginCard from "../components/LoginCard";
+import AuthLayout from "../../layouts/AuthLayout.jsx";
+import LoginCard from "../../components/loginCard/LoginCard.jsx";
 
 const Login = () => {
   return (

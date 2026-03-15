@@ -1,8 +1,8 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
-import Topbar from "./Topbar";
+import Topbar from "../Topbar";
 
-const DashboardLayout = () => {
+const studDashLayout = () => {
   return (
     <div
       className="
@@ -28,4 +28,4 @@ const DashboardLayout = () => {
   );
 };
 
-export default DashboardLayout;
+export default studDashLayout;
