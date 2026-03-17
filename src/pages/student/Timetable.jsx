@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import SectionCard from "../../components/dashboard/SectionCard";
 
 const Timetable = () => {
   const timetable = {
@@ -65,55 +66,63 @@ const Timetable = () => {
   }, []);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
 
-      <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+      {/* ⭐ Page Header */}
+      <h1 className="text-2xl font-semibold">
         Weekly Timetable
       </h1>
 
-      <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {Object.entries(timetable).map(([day, subjects]) => (
-          <div
-            key={day}
-            className={`p-6 rounded-2xl border shadow-sm transition
-            ${
-              today === day
-                ? "bg-blue-50 border-blue-400 dark:bg-blue-900/20"
-                : "bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
-            }`}
-          >
-            {/* Day Header */}
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="font-semibold text-lg text-gray-900 dark:text-gray-100">
-                {day}
-              </h2>
+      {/* ⭐ Timetable Grid */}
+      <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
 
-              {today === day && (
-                <span className="text-xs px-3 py-1 rounded-full bg-blue-600 text-white">
-                  Today
-                </span>
-              )}
-            </div>
+        {Object.entries(timetable).map(([day, subjects]) => {
+          const isToday = today === day;
 
-            {/* Subjects */}
-            <div className="space-y-2">
-              {subjects.map((subject, i) => (
-                <div
-                  key={i}
-                  className={`text-sm px-3 py-2 rounded-lg flex justify-between
-                  ${
-                    subject === "Break"
-                      ? "italic text-gray-400"
-                      : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200"
-                  }`}
-                >
-                  <span>P{i + 1}</span>
-                  <span>{subject}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
+          return (
+            <SectionCard
+              key={day}
+              title={day}
+              action={
+                isToday && (
+                  <span className="text-xs px-3 py-1 rounded-full bg-indigo-600 text-white">
+                    Today
+                  </span>
+                )
+              }
+            >
+              <div className="space-y-2">
+
+                {subjects.map((subject, i) => (
+                  <div
+                    key={i}
+                    className={`
+                      flex items-center justify-between
+                      px-3 py-2 rounded-lg text-sm
+                      ${
+                        subject === "Break"
+                          ? "italic text-gray-400"
+                          : "bg-gray-100 dark:bg-gray-800"
+                      }
+                    `}
+                  >
+                    {/* Period */}
+                    <span className="font-medium text-gray-500 dark:text-gray-400">
+                      P{i + 1}
+                    </span>
+
+                    {/* Subject */}
+                    <span className="text-right">
+                      {subject === "Break" ? "☕ Break" : subject}
+                    </span>
+                  </div>
+                ))}
+
+              </div>
+            </SectionCard>
+          );
+        })}
+
       </div>
 
     </div>

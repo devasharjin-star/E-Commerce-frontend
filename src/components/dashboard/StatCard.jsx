@@ -1,41 +1,37 @@
-const StatCard = ({ title, value, icon }) => {
+const StatCard = ({ title, value, icon, accent = "indigo" }) => {
   return (
     <div
       className="
-      bg-white
-      text-gray-800
-      p-5
+      relative
+      bg-white dark:bg-gray-900
+      border border-gray-200 dark:border-gray-800
       rounded-2xl
-      shadow-sm
-      hover:shadow-md
-      transition
+      p-5
       flex items-center justify-between
-      border border-gray-200
-
-      dark:bg-gray-900
-      dark:text-gray-200
-      dark:border-gray-700
+      transition
+      hover:shadow-lg
+      hover:-translate-y-0.5
       "
     >
+      {/* 🔹 Left Content */}
       <div>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
+        <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
           {title}
         </p>
 
-        <h3 className="text-2xl font-bold mt-1">
+        <h3 className="text-2xl font-bold mt-1 tracking-tight">
           {value}
         </h3>
       </div>
 
+      {/* 🔹 Icon Container */}
       <div
-        className="
-        w-12 h-12
-        flex items-center justify-center
-        rounded-full
-        bg-gray-100
-
-        dark:bg-blue-600
-        "
+        className={`
+        w-12 h-12 flex items-center justify-center
+        rounded-xl
+        bg-${accent}-100 text-${accent}-600
+        dark:bg-${accent}-600/20 dark:text-${accent}-400
+        `}
       >
         {icon}
       </div>

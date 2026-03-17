@@ -1,4 +1,5 @@
 import { useState } from "react";
+import SectionCard from "../../components/dashboard/SectionCard";
 
 const AcademicOverview = () => {
   const subjects = [
@@ -52,179 +53,182 @@ const AcademicOverview = () => {
   );
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-6">
 
-      {/* ===== Subjects ===== */}
-      <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
-        <h2 className="text-xl font-semibold mb-6">
-          Current Semester Subjects
-        </h2>
-
+      {/* ⭐ Subjects */}
+      <SectionCard title="Current Semester Subjects">
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {subjects.map((sub, index) => (
+          {subjects.map((sub) => (
             <div
-              key={index}
-              className="p-5 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
+              key={sub.name}
+              className="
+              p-5 rounded-xl
+              bg-gray-50 dark:bg-gray-800
+              border border-gray-200 dark:border-gray-700
+              hover:shadow-md transition
+              "
             >
               <h3 className="font-semibold text-lg">{sub.name}</h3>
+
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
                 Attendance: {sub.attendance}%
               </p>
             </div>
           ))}
         </div>
-      </div>
+      </SectionCard>
 
-      {/* ===== Internal Assessment ===== */}
-      <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
-        <h2 className="text-xl font-semibold mb-6">
-          Internal Assessment (IAT)
-        </h2>
+      {/* ⭐ Internal Assessment */}
+      <SectionCard title="Internal Assessment (IAT)">
+        <TabSelector
+          options={["iat1", "iat2"]}
+          selected={selectedInternal}
+          onChange={setSelectedInternal}
+        />
 
-        <div className="flex gap-3 mb-6">
-          {["iat1", "iat2"].map((type) => (
-            <button
-              key={type}
-              onClick={() => setSelectedInternal(type)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                selectedInternal === type
-                  ? "bg-blue-600 text-white shadow-md"
-                  : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
-              }`}
-            >
-              {type.toUpperCase()}
-            </button>
-          ))}
-        </div>
+        <MarksGrid
+          subjects={subjects}
+          type="internal"
+          keyName={selectedInternal}
+          max={25}
+          color="indigo"
+        />
+      </SectionCard>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {subjects.map((sub, index) => {
-            const mark = sub.internal[selectedInternal];
-            const percentage = (mark / 25) * 100;
+      {/* ⭐ Slip Tests */}
+      <SectionCard title="Slip Tests">
+        <TabSelector
+          options={["s1", "s2", "s3", "s4", "s5"]}
+          selected={selectedSlip}
+          onChange={setSelectedSlip}
+          labelPrefix="Slip "
+        />
 
-            return (
-              <div
-                key={index}
-                className="p-5 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
-              >
-                <h3 className="font-semibold text-lg">{sub.name}</h3>
-                <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                  {mark} / 25
-                </p>
+        <MarksGrid
+          subjects={subjects}
+          type="slip"
+          keyName={selectedSlip}
+          max={5}
+          color="purple"
+        />
+      </SectionCard>
 
-                <div className="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full mt-3">
-                  <div
-                    className="h-2 rounded-full bg-blue-500 transition-all duration-300"
-                    style={{ width: `${percentage}%` }}
-                  ></div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* ===== Slip Tests ===== */}
-      <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
-        <h2 className="text-xl font-semibold mb-6">
-          Slip Tests
-        </h2>
-
-        <div className="flex flex-wrap gap-3 mb-6">
-          {["s1", "s2", "s3", "s4", "s5"].map((type, i) => (
-            <button
-              key={type}
-              onClick={() => setSelectedSlip(type)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                selectedSlip === type
-                  ? "bg-purple-600 text-white shadow-md"
-                  : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
-              }`}
-            >
-              Slip {i + 1}
-            </button>
-          ))}
-        </div>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {subjects.map((sub, index) => {
-            const mark = sub.slip[selectedSlip];
-            const percentage = (mark / 5) * 100;
-
-            return (
-              <div
-                key={index}
-                className="p-5 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
-              >
-                <h3 className="font-semibold text-lg">{sub.name}</h3>
-                <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                  {mark} / 5
-                </p>
-
-                <div className="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full mt-3">
-                  <div
-                    className="h-2 rounded-full bg-purple-500 transition-all duration-300"
-                    style={{ width: `${percentage}%` }}
-                  ></div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* ===== Assignment Submission ===== */}
-      <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
-        <h2 className="text-xl font-semibold mb-6">
-          Assignment Submission Status
-        </h2>
-
-        <div className="flex flex-wrap gap-3 mb-6">
-          {subjects.map((sub) => (
-            <button
-              key={sub.name}
-              onClick={() => setSelectedSubject(sub.name)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                selectedSubject === sub.name
-                  ? "bg-green-600 text-white shadow-md"
-                  : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
-              }`}
-            >
-              {sub.name}
-            </button>
-          ))}
-        </div>
+      {/* ⭐ Assignments */}
+      <SectionCard title="Assignment Submission Status">
+        <TabSelector
+          options={subjects.map((s) => s.name)}
+          selected={selectedSubject}
+          onChange={setSelectedSubject}
+        />
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {Object.entries(currentSubject.assignment).map(
             ([key, value], index) => (
               <div
                 key={key}
-                className="p-5 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
+                className="
+                p-5 rounded-xl
+                bg-gray-50 dark:bg-gray-800
+                border border-gray-200 dark:border-gray-700
+                "
               >
                 <h3 className="font-semibold text-lg">
                   Assignment {index + 1}
                 </h3>
 
-                <div className="mt-3">
-                  <span
-                    className={`px-3 py-1 text-xs rounded-full ${
-                      value === "Submitted"
-                        ? "bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-200"
-                        : "bg-red-100 text-red-600 dark:bg-red-800 dark:text-red-200"
-                    }`}
-                  >
-                    {value}
-                  </span>
-                </div>
+                <StatusBadge status={value} />
               </div>
             )
           )}
         </div>
-      </div>
+      </SectionCard>
 
     </div>
   );
 };
+
+/* ================= COMPONENTS ================= */
+
+const TabSelector = ({
+  options,
+  selected,
+  onChange,
+  labelPrefix = ""
+}) => (
+  <div className="flex flex-wrap gap-3 mb-6">
+    {options.map((opt, i) => (
+      <button
+        key={opt}
+        onClick={() => onChange(opt)}
+        className={`
+        px-4 py-2 rounded-lg text-sm font-medium transition
+        ${
+          selected === opt
+            ? "bg-indigo-600 text-white shadow"
+            : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+        }
+        `}
+      >
+        {labelPrefix ? `${labelPrefix}${i + 1}` : opt.toUpperCase()}
+      </button>
+    ))}
+  </div>
+);
+
+const MarksGrid = ({
+  subjects,
+  type,
+  keyName,
+  max,
+  color
+}) => (
+  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    {subjects.map((sub) => {
+      const mark = sub[type][keyName];
+      const percentage = (mark / max) * 100;
+
+      return (
+        <div
+          key={sub.name}
+          className="
+          p-5 rounded-xl
+          bg-gray-50 dark:bg-gray-800
+          border border-gray-200 dark:border-gray-700
+          "
+        >
+          <h3 className="font-semibold text-lg">{sub.name}</h3>
+
+          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            {mark} / {max}
+          </p>
+
+          <div className="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full mt-3">
+            <div
+              className={`h-2 rounded-full bg-${color}-500 transition-all`}
+              style={{ width: `${percentage}%` }}
+            />
+          </div>
+        </div>
+      );
+    })}
+  </div>
+);
+
+const StatusBadge = ({ status }) => (
+  <div className="mt-3">
+    <span
+      className={`
+      px-3 py-1 text-xs rounded-full font-medium
+      ${
+        status === "Submitted"
+          ? "bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-200"
+          : "bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-200"
+      }
+      `}
+    >
+      {status}
+    </span>
+  </div>
+);
 
 export default AcademicOverview;

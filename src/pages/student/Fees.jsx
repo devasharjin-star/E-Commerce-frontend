@@ -1,4 +1,7 @@
 import { useState, useMemo } from "react";
+import SectionCard from "../../components/dashboard/SectionCard";
+import StatCard from "../../components/dashboard/StatCard";
+import { Wallet, CheckCircle, AlertCircle } from "lucide-react";
 
 const Fees = () => {
   const feesData = [
@@ -50,19 +53,19 @@ const Fees = () => {
   }, [currentSemester]);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
 
-      {/* Page Title */}
+      {/* ⭐ Header */}
       <div>
-        <h1 className="text-2xl font-bold text-black dark:text-white">
+        <h1 className="text-2xl font-semibold">
           Fee & Payment Details
         </h1>
-        <p className="text-sm text-[var(--muted)] mt-1">
-          View semester-wise fee payments and pending balances
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          View semester-wise payments and outstanding balance
         </p>
       </div>
 
-      {/* Semester Filter */}
+      {/* ⭐ Semester Tabs */}
       <div className="flex flex-wrap gap-3">
         {feesData.map((sem) => (
           <button
@@ -70,7 +73,7 @@ const Fees = () => {
             onClick={() => setSelectedSemester(sem.semester)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
               selectedSemester === sem.semester
-                ? "bg-blue-600 text-white shadow-md"
+                ? "bg-indigo-600 text-white shadow"
                 : "bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
             }`}
           >
@@ -79,83 +82,76 @@ const Fees = () => {
         ))}
       </div>
 
-      {/* Summary Cards */}
+      {/* ⭐ Summary Stats */}
       <div className="grid sm:grid-cols-3 gap-6">
 
-        <div className="p-6 rounded-2xl bg-white border border-gray-200 dark:bg-gray-900 dark:border-gray-700 shadow-sm">
-          <p className="text-sm text-black dark:text-white">
-            Total Fees
-          </p>
-          <h2 className="text-xl font-semibold mt-2 text-black dark:text-white">
-            ₹ {totals.total.toLocaleString()}
-          </h2>
-        </div>
+        <StatCard
+          title="Total Fees"
+          value={`₹ ${totals.total.toLocaleString()}`}
+          icon={<Wallet size={20} />}
+        />
 
-        <div className="p-6 rounded-2xl bg-white border border-gray-200 dark:bg-gray-900 dark:border-gray-700 shadow-sm">
-          <p className="text-sm text-black dark:text-white">
-            Paid Amount
-          </p>
-          <h2 className="text-xl font-semibold text-green-600 mt-2">
-            ₹ {totals.paid.toLocaleString()}
-          </h2>
-        </div>
+        <StatCard
+          title="Paid Amount"
+          value={`₹ ${totals.paid.toLocaleString()}`}
+          icon={<CheckCircle size={20} />}
+        />
 
-        <div className="p-6 rounded-2xl bg-white border border-gray-200 dark:bg-gray-900 dark:border-gray-700 shadow-sm">
-          <p className="text-sm text-black dark:text-white">
-            Pending Amount
-          </p>
-          <h2 className="text-xl font-semibold text-red-600 mt-2">
-            ₹ {totals.unpaid.toLocaleString()}
-          </h2>
-        </div>
+        <StatCard
+          title="Pending Amount"
+          value={`₹ ${totals.unpaid.toLocaleString()}`}
+          icon={<AlertCircle size={20} />}
+        />
 
       </div>
 
-      {/* Fee Table */}
-      <div className="overflow-x-auto bg-white rounded-2xl border border-gray-200 dark:bg-gray-900 dark:border-gray-700 shadow-sm">
+      {/* ⭐ Fee Breakdown Table */}
+      <SectionCard title={`${selectedSemester} Fee Breakdown`}>
 
-        <table className="w-full text-left border-collapse">
+        <div className="overflow-x-auto">
 
-          <thead>
-            <tr className="border-b border-gray-200 dark:border-gray-700 text-black dark:text-white text-sm">
-              <th className="p-4">Fee Type</th>
-              <th className="p-4">Amount</th>
-              <th className="p-4">Status</th>
-            </tr>
-          </thead>
+          <table className="w-full text-left text-sm">
 
-          <tbody>
-            {currentSemester.fees.map((fee, index) => (
-              <tr
-                key={index}
-                className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition"
-              >
-                <td className="p-4 text-black dark:text-white">
-                  {fee.title}
-                </td>
-
-                <td className="p-4 text-black dark:text-white">
-                  ₹ {fee.amount.toLocaleString()}
-                </td>
-
-                <td className="p-4">
-                  <span
-                    className={`px-3 py-1 text-xs rounded-full ${
-                      fee.status === "Paid"
-                        ? "bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-200"
-                        : "bg-red-100 text-red-600 dark:bg-red-800 dark:text-red-200"
-                    }`}
-                  >
-                    {fee.status}
-                  </span>
-                </td>
+            <thead>
+              <tr className="border-b border-gray-200 dark:border-gray-700">
+                <th className="p-3 font-medium">Fee Type</th>
+                <th className="p-3 font-medium">Amount</th>
+                <th className="p-3 font-medium text-right">Status</th>
               </tr>
-            ))}
-          </tbody>
+            </thead>
 
-        </table>
+            <tbody>
+              {currentSemester.fees.map((fee, index) => (
+                <tr
+                  key={index}
+                  className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 transition"
+                >
+                  <td className="p-3">{fee.title}</td>
 
-      </div>
+                  <td className="p-3">
+                    ₹ {fee.amount.toLocaleString()}
+                  </td>
+
+                  <td className="p-3 text-right">
+                    <span
+                      className={`px-3 py-1 text-xs rounded-full ${
+                        fee.status === "Paid"
+                          ? "bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-200"
+                          : "bg-red-100 text-red-600 dark:bg-red-800 dark:text-red-200"
+                      }`}
+                    >
+                      {fee.status}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </SectionCard>
 
     </div>
   );

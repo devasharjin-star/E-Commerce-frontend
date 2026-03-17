@@ -1,22 +1,36 @@
-const SectionCard = ({ title, children }) => {
+const SectionCard = ({ title, children, action }) => {
   return (
-    <div
+    <section
       className="
-      bg-white
-      text-gray-800
-      p-6
+      bg-white dark:bg-gray-900
+      border border-gray-200 dark:border-gray-800
       rounded-2xl
-      shadow-sm
-      border border-gray-200
-
-      dark:bg-gray-900
-      dark:text-gray-200
-      dark:border-gray-700
+      overflow-hidden
+      transition
+      hover:shadow-lg
       "
     >
-      <h2 className="text-lg font-semibold mb-4">{title}</h2>
-      {children}
-    </div>
+      {/* 🔹 Header */}
+      <div
+        className="
+        flex items-center justify-between
+        px-6 py-4
+        border-b border-gray-200 dark:border-gray-800
+        "
+      >
+        <h2 className="text-lg font-semibold tracking-tight">
+          {title}
+        </h2>
+
+        {/* Optional right-side action (button, link, etc.) */}
+        {action && <div>{action}</div>}
+      </div>
+
+      {/* 🔹 Content */}
+      <div className="p-6">
+        {children}
+      </div>
+    </section>
   );
 };
 

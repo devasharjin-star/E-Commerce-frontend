@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Megaphone, Search } from "lucide-react";
+import SectionCard from "../../components/dashboard/SectionCard";
 
 const Announcements = () => {
   const announcements = [
@@ -46,56 +47,63 @@ const Announcements = () => {
   });
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
 
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <h1 className="text-2xl font-bold flex items-center gap-2">
-          <Megaphone size={22} />
+      {/* ⭐ Page Header */}
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+
+        <h1 className="text-2xl font-semibold flex items-center gap-3">
+          <Megaphone className="text-indigo-600" size={24} />
           Announcements
         </h1>
 
         {/* Search */}
-        <div className="relative">
+        <div className="relative w-full lg:w-72">
           <Search
             size={18}
-            className="absolute left-3 top-2.5 text-gray-400"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
           />
+
           <input
             type="text"
             placeholder="Search announcements..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="
-              pl-10 pr-4 py-2 rounded-lg
+              w-full pl-10 pr-4 py-2 rounded-lg
               bg-white dark:bg-gray-900
-              border border-gray-300 dark:border-gray-600
-              focus:outline-none focus:ring-2 focus:ring-blue-500
-              w-full md:w-64
+              border border-gray-200 dark:border-gray-700
+              focus:outline-none focus:ring-2 focus:ring-indigo-500
             "
           />
         </div>
       </div>
 
-      {/* Category Filters */}
-      <div className="flex flex-wrap gap-3">
-        {["All", "Academic", "Exam", "Event"].map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setSelectedCategory(cat)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
-              selectedCategory === cat
-                ? "bg-blue-600 text-white shadow-md"
-                : "bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
+      {/* ⭐ Filters */}
+      <SectionCard title="Categories">
+        <div className="flex flex-wrap gap-3">
+          {["All", "Academic", "Exam", "Event"].map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`
+                px-4 py-2 rounded-lg text-sm font-medium transition
+                ${
+                  selectedCategory === cat
+                    ? "bg-indigo-600 text-white shadow"
+                    : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+                }
+              `}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+      </SectionCard>
 
-      {/* Announcement Cards */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* ⭐ Announcement Cards */}
+      <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
+
         {filteredAnnouncements.length > 0 ? (
           filteredAnnouncements.map((item) => (
             <div
@@ -103,12 +111,13 @@ const Announcements = () => {
               className="
                 p-6 rounded-2xl
                 bg-white dark:bg-gray-900
-                border border-gray-200 dark:border-gray-700
-                shadow-sm hover:shadow-md transition
+                border border-gray-200 dark:border-gray-800
+                hover:shadow-lg transition
                 flex flex-col justify-between
               "
             >
               <div>
+
                 <h3 className="text-lg font-semibold">
                   {item.title}
                 </h3>
@@ -116,24 +125,17 @@ const Announcements = () => {
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-3">
                   {item.description}
                 </p>
+
               </div>
 
-              <div className="mt-5 flex items-center justify-between">
-                <span
-                  className={`px-3 py-1 text-xs rounded-full ${
-                    item.priority === "Urgent"
-                      ? "bg-red-100 text-red-600 dark:bg-red-800 dark:text-red-200"
-                      : item.priority === "Important"
-                      ? "bg-yellow-100 text-yellow-600 dark:bg-yellow-800 dark:text-yellow-200"
-                      : "bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-200"
-                  }`}
-                >
-                  {item.priority}
-                </span>
+              <div className="mt-6 flex items-center justify-between">
+
+                <PriorityBadge priority={item.priority} />
 
                 <span className="text-xs text-gray-400">
                   {item.date}
                 </span>
+
               </div>
             </div>
           ))
@@ -142,9 +144,31 @@ const Announcements = () => {
             No announcements found.
           </p>
         )}
+
       </div>
 
     </div>
+  );
+};
+
+/* ⭐ Priority Badge Component */
+
+const PriorityBadge = ({ priority }) => {
+  const styles = {
+    Urgent:
+      "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300",
+    Important:
+      "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300",
+    Normal:
+      "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300"
+  };
+
+  return (
+    <span
+      className={`px-3 py-1 text-xs rounded-full font-medium ${styles[priority]}`}
+    >
+      {priority}
+    </span>
   );
 };
 
